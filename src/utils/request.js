@@ -6,7 +6,7 @@ import { Message } from 'element-ui'
 import store from '@/store'
 import { getTimeStamp } from '@/utils/auth'
 import router from '@/router'
-const TimeOut = 200 // 定义超时时间
+const TimeOut = 3600 // 定义超时时间
 // 创建axios实例
 const service = axios.create({
   // 当执行 yarn dev => .env.development => /api => 跨域代理
