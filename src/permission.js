@@ -1,5 +1,5 @@
 // 权限拦截实现步骤
-// 第一步：犹豫权限拦截需要判断要跳转的路由地址,所以需要用到路由守卫技术,那就需要进行引入路由router
+// 第一步：由于权限拦截需要判断要跳转的路由地址,所以需要用到路由守卫技术,那就需要进行引入路由router
 // 第二步：因为要用到vuex中存储的token,需要在js文件中引入token
 // 权限拦截在路由跳转  导航守卫
 import router from '@/router'
@@ -27,7 +27,7 @@ router.beforeEach(async(to, from, next) => {
     } else {
       // 因为每个路由地址的切换都会经过路由守卫,为了防止多次触发获取用户资料的接口,需要做一个判断,判断现在有没有用户资料,如果有用户资料则不用获取,如果没有用户资料才进行获取
       // 怎么判断现在有没有用户资料？ 通过userId来进行判断
-      console.log(store)
+      // console.log(store)
       if (!store.getters.userId) {
         await store.dispatch('user/getUserInfo') // 等到用户资料获取完毕再执行next()方法 跳转
       }

@@ -20,6 +20,14 @@ export function getUserInfo(token) {
     // }
   })
 }
+/*
+  **根据用户id获取用户详情
+*/
+export function getUserDetailById(id) {
+  return request({
+    url: `/sys/user/${id}` // 默认是get请求这个method可以省略
+  })
+}
 
 export function logout() {
 

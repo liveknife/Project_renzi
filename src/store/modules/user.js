@@ -1,5 +1,5 @@
-import { getToken, setToken, removeToken } from '@/utils/auth'
-import { login, getUserInfo } from '@/api/user' // 引入登录接口
+import { getToken, setToken, removeToken, setTimeStamp } from '@/utils/auth'
+import { login, getUserInfo, getUserDetailById } from '@/api/user' // 引入登录接口
 
 // 状态
 const state = {
@@ -46,6 +46,8 @@ const actions = {
     // 调用api的接口
     const result = await login(data) // 拿到token
     context.commit('setToken', result) // 设置token
+    // 代码执行到这里证明已经获取到token,登录成功的同时在缓存中存储一个当前的时间戳,记录下来
+    setTimeStamp() // 存入时间戳
     // 响应拦截器里面做了处理,所以这里就不需要判断直接调用即可
     // axios 默认加了一层data
     // if (result.data.success) {
@@ -70,22 +72,26 @@ const actions = {
     // result 拿到的直接是个data对象,而不是整个接口对象,因为在响应拦截器里进行了解构
     const result = await getUserInfo() // 调用接口,获取用户资料
     // 将后台返回的数据更新到mutations对象里定义的setUserInfo方法里面进行修改,修改state数据必须经过mutations
-    // console.log(result, '11111')
-    context.commit('setUserInfo', result) // 提交到mutations
+    /*
+      DAY04：
+      注意: 获取用户头像的接口需要放在获取用户资料的接口后面,因为要传userId后面
+    */
+    const baseInfo = await getUserDetailById(result.userId)
+    // 通过展开运算符将获取用户资料返回的数据和获取用户头像返回的数据做一个合并,合并到一个对象里
+    // const obj = { ...result, ...baseInfo } // 这样也可以
+    // context.commit('setUserInfo', result)
+    // 合并完的数据一次更新到state的userInfo里面
+    context.commit('setUserInfo', { ...result, ...baseInfo }) // 提交到mutations
     return result // 这个return是干嘛的？给后期做权限的时候留下的伏笔
+  },
+  // 退出登录功能
+  logout(context) {
+    // 点击退出登录,清空vuex的token和cookie缓存的token,并且删除用户的所有信息。通过调用mutations里面封装的删除功能来实现登出
+    // 删除token
+    context.commit('removeToken')
+    // 删除用户信息
+    context.commit('removeUserInfo')
   }
-// 第二种方法: promise.then()的方式进行接口调用
-  // 为什么async/await 不用返回new Promise,因为 async函数本身就是 Promise,promise的值返回的值
-// login(context, data) {
-//   return new Promise(function(resolve) {
-//     login(data).then(result => {
-//       if (result.data.success) {
-//         context.commit('setToken',  result.data.data) // 提交mutations设置token
-//         resolve()  // 表示执行成功了
-//       }
-//     })
-//   })
-// }
 }
 export default {
   namespaced: true, // 开启命名空间
