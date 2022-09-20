@@ -1,17 +1,22 @@
 <template>
+  <!-- 路由里面hidden设置为true,这里404和登录页面不需要展示所以v-if取反item.hidden让它们不展示在菜单里面 -->
   <div v-if="!item.hidden">
+    <!-- hasOneShowingChild 判断路由规则中children的数量,如果只有一个children的话,证明没有二级菜单,所以就展示下面的模板 -->
     <template v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)&&!item.alwaysShow">
       <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)">
         <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{'submenu-title-noDropdown':!isNest}">
+          <!-- 将菜单栏的图标和标题的展示又封装了一个item组件 -->
           <item :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)" :title="onlyOneChild.meta.title" />
         </el-menu-item>
       </app-link>
     </template>
-
+    <!-- 如果根据hasOneShowingChild这个方法判断children里面还有children的话就说明有二级菜单,则渲染的是下面的模板 -->
+    <!-- el-submenu 代表的是二级菜单的展示 -->
     <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)" popper-append-to-body>
       <template slot="title">
         <item v-if="item.meta" :icon="item.meta && item.meta.icon" :title="item.meta.title" />
       </template>
+      <!-- sidebar-item 组件自己调用自己,相当于函数中的递归,解决了菜单当中有子级菜单的问题 就是树形结构展示的问题-->
       <sidebar-item
         v-for="child in item.children"
         :key="child.path"
