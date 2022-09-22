@@ -115,3 +115,25 @@ export function param2Obj(url) {
   })
   return obj
 }
+
+// 将列表型的数据转化成树形数据 => 递归算法 => 自身调用自身 => 一定条件不能一样,否则就会死循环
+// 遍历树形有一个重点 要先找一个头
+// list 是后台返回的数据
+// (1) 对list数组进行遍历,通过判断pid是不是空字符串来确定是不是一级节点
+// rootValue 代表父节点的id,只不过刚开始默认为空字符串,因为返回数据中所有的一级节点的pid是空字符串,要通过它去查找所有的一级节点
+export function tranListToTreeData(list, rootValue) {
+  // debugger
+  const arr = []
+  list.forEach(item => { // item 代表每个对象
+    if (item.pid === rootValue) {
+      // 找到之后 就要去找item下面有没有子节点,因为通过现象看到所有子节点的id等于一级节点,这里采用了递归去完成,只在内部调用函数本身,将子节点的id(item.id)传回给rootValue,再从if开始判断,如果相等则执行下面逻辑
+      const children = tranListToTreeData(list, item.id)
+      if (children.length) {
+        // 如果children的长度大于0 说明找到了子节点
+        item.children = children
+      }
+      arr.push(item) // 将内容加入到数组中
+    }
+  })
+  return arr
+}

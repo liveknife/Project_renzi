@@ -18,9 +18,9 @@ import '@/permission' // permission control 引入权限配置文件
 // import { imgerror } from '@/directives' 常规写法 有多个指令的时候需要多次引入,重复注册自定义指令,代码冗余,不便于修改,查阅。所以这时候会有一个新的语法：import * as 变量 from '@/directives' 这种写法得到的时一个对象，我们就可以通过遍历对像去注册
 import * as directive from '@/directives'
 // 打印发现它是一个对象,里面存的是我们导出的数据
-console.log(directive, 'ccc')
+// console.log(directive, 'ccc')
 // for in 遍历对象 通过遍历对象拿到对象中的所有属性
-console.log(Object.keys(directive), '吃饭吃饭') // 得到了一个数组
+// console.log(Object.keys(directive), '吃饭吃饭') // 得到了一个数组
 Object.keys(directive).forEach(key => {
   // console.log(key) 数组的每个值
   // 如何获取对象中属性所对应的值

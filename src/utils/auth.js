@@ -17,7 +17,7 @@ export function removeToken() {
 }
 // 获取时间戳
 export function getTimeStamp() {
-  console.log(TimeKey)
+  // console.log(TimeKey)
   return Cookies.get(TimeKey)
 }
 // 设置时间戳

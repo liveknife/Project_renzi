@@ -52,7 +52,7 @@ service.interceptors.response.use(response => {
     return Promise.reject(new Error(message))
   }
 }, error => {
-  console.dir(error, '2165123')
+  // console.dir(error, '2165123')
   // 当接口响应失败了,会走到error这个回调函数里面
   // 根据后台响应码判断token是否过期
   if (error.response && error.response.data && error.response.data.code === 10002) { // 全等于10002的时候说明token超时了
@@ -68,8 +68,8 @@ service.interceptors.response.use(response => {
 function CheckTimeOut() {
   const currentTime = Date.now() // 获取当前时间戳 最新
   const timeStamp = getTimeStamp() // 缓存中存入的时间戳
-  console.log((currentTime - timeStamp) / 1000)
-  console.log((currentTime - timeStamp) / 1000 > TimeOut, 'ssss')
+  // console.log((currentTime - timeStamp) / 1000)
+  // console.log((currentTime - timeStamp) / 1000 > TimeOut, 'ssss')
   return (currentTime - timeStamp) / 1000 > TimeOut
 }
 // 导出service实例
