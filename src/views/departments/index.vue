@@ -24,20 +24,21 @@
         <el-tree default-expand-all :data="departs" :props="defaultProps">
           <!-- 将数据解构出来,子组件内直接 属性名.属性值就可以显示 -->
           <!--  -->
-          <TreeTools slot-scope="{data}" :tree-node="data" @addDepts="addDepts" @delDepts="getDepartments" />
+          <TreeTools slot-scope="{data}" :tree-node="data" @addDepts="addDepts" @delDepts="getDepartments" @editDepts="editDepts" />
         </el-tree>
       </el-card>
     </div>
     <!-- 添加弹出层组件 -->
     <!-- tree-node 给add-dept子组件传递当前节点对象 -->
-    <add-dept :show-dialog="showDialog" :current-node="node" />
+    <!-- <add-dept :current-node="node" @addDepts="getDepartments" @changedialog="test" /> -->
+    <add-dept ref="addDept" :show-dialog.sync="showDialog" :current-node="node" @addDepts="getDepartments" />
   </div>
 </template>
 
 <script>
 import TreeTools from './components/tree-tools.vue'
 import { getDepartments } from '@/api/departments'
-import { tranListToTreeData } from '@/utils'
+import { tranListToTreeData } from '@/utils' // 递归渲染树状结构
 import addDept from './components/add-dept.vue'
 export default {
   components: {
@@ -69,6 +70,7 @@ export default {
       node: {} // 记录当前的node节点
     }
   },
+
   created() {
     this.getDepartments()
   },
@@ -77,7 +79,7 @@ export default {
     async getDepartments() {
       const results = await getDepartments()
       // 根节点数据赋值 转换为接口请求回来的数据
-      this.company = { name: results.companyName, manager: '负责人' }
+      this.company = { name: results.companyName, manager: '负责人', id: '' }
       this.departs = tranListToTreeData(results.depts, '') // 发现后台返回的是一个扁平化的数据结构,而不是树形的数据结构
       // console.log(results)
     },
@@ -85,6 +87,18 @@ export default {
     addDepts(node) {
       this.showDialog = true // 显示弹层
       this.node = node // 在调用当前接口的时候需要传递,知道是给哪一个节点添加的 将当前节点存下来
+    },
+    // test(value) {
+    //   this.showDialog = value
+    // }
+    // 定义当前点击编辑按钮让弹窗展示的方法
+    editDepts(node) {
+      // console.log(node) // 当前点击的节点对象
+      this.showDialog = true
+      this.node = node
+      // 应该在这里调用获取部门详情的方法
+      // 通过ref的技术拿到子组件的实例,来调用子组件的方法,然后把当前节点的id通过形参传递过去
+      this.$refs.addDept.getDepartDetail(node.id)
     }
   }
 }

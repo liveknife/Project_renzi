@@ -40,7 +40,7 @@
   </el-row>
 </template>
 <script>
-import { delDepartments, addDepartments } from '@/api/departments'
+import { delDepartments } from '@/api/departments'
 export default {
   name: 'Treetools',
   // 接收父组件传过来的数据
@@ -63,9 +63,9 @@ export default {
         // 在当前点击的部门下,添加子部门 => this.treeNode就是当前点击的部门
         // 再点击添加选项的时候需要组件传递事件,然后将当前点击的节点信息传递过去
         this.$emit('addDepts', this.treeNode) // 触发自定义事件 告诉父组件展示弹层
-        addDepartments()
       } else if (type === 'edit') {
         // 编辑部门
+        this.$emit('editDepts', this.treeNode)
       } else {
         // 删除部门
         this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {

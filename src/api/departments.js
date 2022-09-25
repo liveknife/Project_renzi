@@ -24,11 +24,30 @@ export function delDepartments(id) {
 
   })
 }
+// 新增信息接口 addDepartments
 export function addDepartments(data) {
   return request({
     url: '/company/department',
     method: 'post',
     data // axios中的body参数 data
+  })
+}
+// 获取部门详情 getDepartDetail
+export function getDepartDetail(id) {
+  return request({
+    url: `/company/department/${id}`
+  })
+}
+
+/**
+ * 保存编辑的数据
+ *
+ * ***/
+export function updateDepartments(data) {
+  return request({
+    url: `/company/department/${data.id}`,
+    method: 'put',
+    data // 表单的数据对象
   })
 }
 
