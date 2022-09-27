@@ -1,19 +1,16 @@
 import Vue from 'vue'
-
 import 'normalize.css/normalize.css' // A modern alternative to CSS resets
-
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import locale from 'element-ui/lib/locale/lang/en' // lang i18n
-
 import '@/styles/index.scss' // global css 全局的css样式文件
-
 import App from './App' // 引入根组件
 import store from './store' // 引入vuex文件
 import router from './router' // 引入路由文件
-
 import '@/icons' // icon  引入图标配置文件
 import '@/permission' // permission control 引入权限配置文件
+import Component from '@/components' // 引入全局注册组件的文件
+import * as filters from '@/filters' // 引入过滤器封装方法的文件
 // 引入封装好的自定义指令
 // import { imgerror } from '@/directives' 常规写法 有多个指令的时候需要多次引入,重复注册自定义指令,代码冗余,不便于修改,查阅。所以这时候会有一个新的语法：import * as 变量 from '@/directives' 这种写法得到的时一个对象，我们就可以通过遍历对像去注册
 import * as directive from '@/directives'
@@ -27,7 +24,11 @@ Object.keys(directive).forEach(key => {
   // console.log(directive[key], '对象值') // 对象和所对应的值
   Vue.directive(key, directive[key]) // 注册自定义指令
 })
-
+// 全局注册所有的过滤器
+// 语法：Vue.filter('过滤器名称', '函数')
+Object.keys(filters).forEach(key => {
+  Vue.filter(key, filters[key]) // 注册自定义过滤器
+})
 // 如何实现一个全局的自定义指令
 // Vue.directive('指令名称', {
 //   inserted(el) {
@@ -40,7 +41,7 @@ Object.keys(directive).forEach(key => {
 Vue.use(ElementUI, { locale })
 // 如果想要中文版 element-ui，按如下方式声明
 // Vue.use(ElementUI)
-
+Vue.use(Component) // 全局注册自己自定义的组件
 Vue.config.productionTip = false
 
 new Vue({
