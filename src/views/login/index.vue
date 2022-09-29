@@ -145,22 +145,11 @@ export default {
             // this.loading = false
           } catch (err) {
             // 接口响应失败或者接口返回的success是false的时候会到catch进行错误捕获
-            console.log(err, 1111)
+            // console.log(err, 1111)
             // this.loading = false
           } finally { // 不论是try还是catch 都要执行finally里面的逻辑
             this.loading = false
           }
-          this.$refs.loginForm.validate(valid => {
-            if (valid) {
-              // 如果验证通过调用登录接口,通过触发actions里面的方法
-              this.$store.dispatch('user/login', this.loginForm).then(() => {
-                this.$router.push('/')
-              }).catch(err => {
-                console.log(err)
-              })
-              // console.log('验证通过')
-            }
-          })
         }
       })
     }

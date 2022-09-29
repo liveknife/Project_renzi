@@ -63,6 +63,17 @@ export const constantRoutes = [
       meta: { title: '首页', icon: 'dashboard' }
     }]
   },
+  {
+    path: '/import',
+    component: Layout,
+    hidden: true,
+    children: [
+      {
+        path: '', // 表示默认的二级路由
+        component: () => import ('@/views/import')
+      }
+    ]
+  },
 
   // 这个配置放到最后是指当所有的路由地址都不匹配的时候重定向到404页面
   { path: '*', redirect: '/404', hidden: true }

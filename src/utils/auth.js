@@ -9,6 +9,7 @@ export function getToken() {
 }
 // 存储token的方法
 export function setToken(token) {
+  console.log(token)
   return Cookies.set(TokenKey, token)
 }
 // 删除token的方法
