@@ -15,6 +15,16 @@ export default {
         title: '员工管理', // 为什么要用title 因为左侧导航读取了这里的title属性
         icon: 'people'
       }
+    },
+    // 员工详情路由页面
+    {
+      // 这种写法必须传id, 加个?号不添加id也可以跳转(?代表id可传可不传,不加?就是id必须传,不然会跳到404页面)
+      path: 'detail/:id?', // query传参 动态路由传参
+      component: () => import('@/views/employees/detail'),
+      hidden: true, // 不在左侧菜单显示
+      meta: {
+        title: '员工详情' // 标记当前路由规则的中文名称 后续在做左侧菜单时 使用
+      }
     }
   ]
 }

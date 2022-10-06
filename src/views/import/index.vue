@@ -1,6 +1,6 @@
 <template>
   <div>
-    <UploadExcel :on-success="success" />
+    <UploadExcel ref="data" :on-success="success" />
   </div>
 </template>
 
@@ -39,13 +39,19 @@ export default {
       var newArr = results.map(item => { // 遍历excel导入的数据
         var userInfo = {}
         // item是数组里面每一个对象
-        console.log(Object.keys(item), 666)
+        // console.log(Object.keys(item), 666)
         // 通过Object.keys(item) // 拿到每一个对象的属性名并返回一个数组
         Object.keys(item).forEach(key => {
-          // userInfo[userRelations[key]]   // 将拿到的英文属性名添加到定义的新对象里面
-          userInfo[userRelations[key]] = item[key] // 将每一个对象的属性值赋给新对象的属性名(英文)
-          console.log(userRelations[key], '属性') // 这个是属性名对应的英文
-          console.log(item[key], 'key') // 属性名对应的属性值
+          if (userRelations[key] === 'timeOfEntry' || userRelations[key] === 'correctionTime') {
+            userInfo[userRelations[key]] = new Date(this.formatDate(item[key], '/'))
+            debugger
+            return
+          } else {
+            // userInfo[userRelations[key]]   // 将拿到的英文属性名添加到定义的新对象里面
+            userInfo[userRelations[key]] = item[key] // 将每一个对象的属性值赋给新对象的属性名(英文)
+          // console.log(userRelations[key], '属性') // 这个是属性名对应的英文
+          // console.log(item[key], 'key') // 属性名对应的属性值
+          }
         })
         return userInfo
       })
@@ -53,6 +59,18 @@ export default {
       await importEmployee(newArr)
       this.$message.success('导入excel成功')
       this.$router.back() // 回到上一个页面,哪里来回哪去
+    },
+    // 转化excel的日期格式方法的封装
+    formatDate(numb, format) {
+      const time = new Date((numb - 1) * 24 * 3600000 + 1)
+      time.setYear(time.getFullYear() - 70) // 由于excel里面的日期转换为时间戳之后,比本来的日期多了70年 所以这里减去了70年
+      const year = time.getFullYear() + ''
+      const month = time.getMonth() + 1 + ''
+      const date = time.getDate() + ''
+      if (format && format.length === 1) {
+        return year + format + month + format + date
+      }
+      return year + (month < 10 ? '0' + month : month) + (date < 10 ? '0' + date : date)
     }
   }
 }

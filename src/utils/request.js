@@ -13,7 +13,7 @@ const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // 当执行 npm run dev命令的时候,会读取开发环境文件.env.development里面的变量,变量的值为 /api ,当发起请求的时候就会触发代理机制,在vue.config.js里面
   timeout: 5000 // 设置接口请求超时时间最长为5秒
 })
-console.log(axios, '566')
+// console.log(axios, '566')
 // day04: 配置请求拦截器
 service.interceptors.request.use(config => {
   // config 是请求的配置信息

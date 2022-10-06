@@ -39,7 +39,8 @@ module.exports = {
     proxy: {
       // 当地址中有 /api 的时候会触发代理机制
       '/api': {
-        target: 'http://ihrm-java.itheima.net/', // 要代理的服务器地址,这里不用写 api
+        // target: 'http://ihrm-java.itheima.net/', // 要代理的服务器地址,这里不用写 api
+        target: 'http://ihrm.itheima.net',
         changeOrigin: true // 是否跨域  值为true的时候开启跨域
         // 代理完毕之后的真实服务地址会变成http://ihrm-java.itheima.net/api,这里要求为什么要注释掉路径重写？
         // 因为这里服务器地址要求,有后面的 api ,所以不需要重写

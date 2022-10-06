@@ -23,6 +23,7 @@
 <script>
 // 组件可以显示左侧内容 也可以显示右侧内容 如果左侧内容不传 图标应该不显示
 export default {
+  name: 'Page',
   props: {
     // 接收父组件传递过来的内容,控制左侧内容显示还是隐藏
     showBefore: {
